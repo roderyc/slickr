@@ -5,7 +5,9 @@
   function paramObject(options) {
     var new_opts = {};
     $.each(options, function(key, value) {
-      new_opts[key] = value;
+      if($.inArray(key, internal_options) === -1) {
+        new_opts[key] = value;
+      }
     });
     return new_opts;
   }
