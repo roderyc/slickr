@@ -60,9 +60,11 @@
   // Returns a set of anchors containing image tags for the given photos, (one image per anchor),
   // using the given options.
   function anchors(photos, options) {
-    return $($.map(photos.photo, function(photo) {
-      return anchor(image(photo, options.display_size), photo, options.link_to_size);
-    }).join("\n"));
+    return $.map(photos.photo, function(photo) {
+      var photo_anchor = $(anchor(image(photo, options.display_size), photo, options.link_to_size));
+      photo_anchor.data("photo", photo);
+      return photo_anchor;
+    });
   };
 
   $.fn.slickr = function(method, user_options, callback) {
@@ -76,7 +78,10 @@
       var images = anchors((data.photos === undefined ? data.photoset : data.photos), options);
 
       elements.each(function(index, element) {
-        $(element).append(images);
+        var element = $(element)
+        $.each(images, function(index, image) {
+          element.append(image);
+        });
       });
 
       if(callback !== undefined) {
